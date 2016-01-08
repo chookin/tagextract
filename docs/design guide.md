@@ -1,11 +1,11 @@
 
 # 数据存储
-- 标签映射存储于mysql中。
-- 采集的分类信息、物品信息等存储于mongo中。
+- 标签映射存储于mysql的数据库`tagbase`中。
+- 采集的分类信息、物品信息等存储于mongo的数据库`ecomm`中。
 
 ## 标签映射存储
-标签映射信息存储于mysql数据库tagbase.tagmap中.  
-考虑到标签映射中，一个分类可以有多个标签，一个标签可以关联多个分类，它们是多对多的关系，因此，不能选用“网站名+分类”即“site　+ category + categoryId”作为表的主键。
+标签映射信息存储于mysql数据表`tagmap`中.  
+考虑到标签映射中，一个分类可以有多个标签，一个标签可以关联多个分类，它们是多对多的关系，因此，不能选用“网站名+分类”即`site + category + categoryId`作为表的主键。
 数据表的设计如下：
 
 <pre>
@@ -27,8 +27,7 @@ CREATE INDEX i_tagmap_site on tagmap (site);
 - category，不区分电商、阅读、音乐等类型，统一存储分类信息；
 - 物品集合，存储电商、阅读、音乐等具体物品，不同类型的物品存储到不同的物品集合中；
 
-目前，数据存储到mongo的ecomm数据库中。
-
+<A NAME="_id_design">
 ### _id设计
 
 为了提升mongo的检索效率，对“_id”进行重点设计。
@@ -54,18 +53,20 @@ CREATE INDEX i_tagmap_site on tagmap (site);
 </pre>
 
 ## 分类集合
-分类信息统一存储到集合ecomm.category中。
-   * _id 请看“_id”设计部分
-   * name 分类名称
-   * site 网站名
-   * code 分类id
-   * level 分类所处层级，一级分类为1
-   * url 该分类的网页url
-   * leaf 是否叶子分类
-   * p_name 父级分类的名字
-   * p_code 父级分类的id
-   * crawTime 该分类下面的具体物品信息爬取完毕的时间
-   * time 该分类信息的爬取时间。
+分类信息统一存储到集合category中。
+
+- _id 请看[_id设计](#_id_design)
+- name 分类名称
+- site 网站名
+- code 分类id
+- level 分类所处层级，顶级分类为1
+- url 分类的网页地址
+- leaf 是否叶子分类，叶子分类为没有子分类的分类
+- p_name 父级分类的名字
+- p_code 父级分类的id
+- tag [] 标签集合
+- crawTime 该分类下面的具体物品信息被抓取完毕的时间
+- time 该分类信息被爬取的时间。
 
 <pre>
 > db.category.findOne()
@@ -87,21 +88,22 @@ CREATE INDEX i_tagmap_site on tagmap (site);
 ### 电商
 goods集合：
 
-- _id 请看“_id”设计部分
-- name
-- site
-- code
-- url
+- _id 请看[_id设计](#_id_design)
+- name 商品名称
+- code 商品id
+- url 商品的网页地址
 - time 采集时间
-- category
-- c_code
-- tag []
-- properties
+- site 网站名
+- category 商品所属分类的名
+- c_code 商品所属分类的id
+- tag `[**,**]` 标签集合
+- time 采集时间
+- properties 详情属性
    * detailedTime 品牌等详情信息的获取时间
-   * desc
-   * scoreNum
-   * scoreValue
-   * price
+   * desc 描述
+   * scoreNum 评论数量
+   * scoreValue 评分，满分100分
+   * price 价格
    * 品牌
    * 店铺
    * 上架时间
@@ -140,89 +142,90 @@ goods集合：
 ### 音乐
 music集合：
 
-- _id 请看“_id”设计部分
-- name
-- site
-- code
-- url
+- _id 请看[_id设计](#_id_design)
+- name 名称
+- site 网站名
+- code id
+- url 地址
+- category 分类名
+- c_code 分类id
+- tag `[**,**]` 标签集合
 - time 采集时间
-- category
-- c_code
-- tag []
 - properties
    * album 专辑名称
-   * albumId
-   * albumUrl
-   * desc
+   * albumId 专辑id
+   * albumUrl 专辑地址
+   * desc 描述
    * favorNum 收藏数
-   * keyWords [**,**] 该网站所打的标签
+   * keyWords `[**,**]` 该网站所打的标签
    * 是否为歌单，true为是，不存在为否
    * playNum 播放次数
    * scoreNum 评论数
    * scoreValue 评分，满分100
-   * singer [{name:**, id:**, url:**}] 歌手列表，包括歌手的名字，id，url
+   * singer `[{name:**, id:**, url:**}]` 歌手列表，包括歌手的名字，id，url
    * type 歌曲类型，对于百度音乐，如果为mv，则值为mv；对于qq音乐，如果为歌单，则为musicList
 
 ### 视频
 video集合：
 
-- _id 请看“_id”设计部分
+- _id
 - name 视频名称
+- code 视频id
+- url 视频url
 - site 视频网站，网站名拼音，全为小写，例如优酷的为youku
-- code 唯一id
-- url 视频的url
-- time 采集时间
 - category 所属分类的名称
 - c_code 所属分类的id
-- tag [] 标签库的标签（采集完后手工标注）
+- tag `[**,**]` 标签库的标签（采集完后手工标注）
+- time 采集时间
 - properties 属性集合
    * alias 别名
    * screenTime 上映时间
    * region 地区
    * desc 描述信息
-   * keyWords [**,**] 该网站所打的标签（如，类型标签: 剧情 / 军事 / 悬疑 / 言情），另外，分类名也添加到keyWords集合中，在打标签时，根据keyWords中标签。
+   * keyWords `[**,**]` 该网站所打的标签（如，类型标签: 剧情 / 军事 / 悬疑 / 言情），另外，分类名也添加到keyWords集合中，在打标签时，根据keyWords中标签。
    * duration 时长，分钟
    * favorNum 收藏数
    * playNum 播放次数
    * downloadTimes 下载次数
    * scoreNum 评论数
    * scoreValue 评分，满分100
-   * director  [{name:**, id:**, url:**}] 导演列表，包括名字，id，url
-   * star [{name:**, id:**, url:**}] 主演列表，包括名字，id，url
-   * presenter   [{name:**, id:**, url:**}] 主持人
-   * series 电视剧的聚集 [{name:**, id:**,url:**, label:**,playNum:**, guests: [{name:**, id:**, url:**}]}] 剧集列表，包括剧集的名字，剧集的id，剧集的url，剧集的label(例如03-21期), 播放次数，嘉宾
+   * director  `[{name:**, id:**, url:**}]` 导演列表，包括名字，id，url
+   * star `[{name:**, id:**, url:**}]` 主演列表，包括名字，id，url
+   * presenter   `[{name:**, id:**, url:**}]` 主持人
+   * series 电视剧的聚集 `[{name:**, id:**,url:**, label:**,playNum:**, guests: [{name:**, id:**, url:**}]}]` 剧集列表，包括剧集的名字，剧集的id，剧集的url，剧集的label(例如03-21期), 播放次数，嘉宾
+   
 ### 动漫
 catoon集合：
 
-- _id 请看“_id”设计部分
-- name 名称
+- _id
+- name 动漫名称
 - site 网站名，网站名拼音，全为小写，例如优酷的为youku
-- code 唯一id
+- code 动漫id
 - url 地址
-- time 采集时间
 - category 所属分类的名称
 - c_code 所属分类的id
-- tag [] 标签库的标签（采集完后手工标注）
+- tag `[**,**]` 标签库的标签（采集完后手工标注）
+- time 采集时间
 - properties 属性集合
    * desc 描述信息
-   * keyWords [**,**] 该网站所打的标签（如，类型标签: 剧情 / 军事 / 悬疑 / 言情）
+   * keyWords `[**,**]` 该网站所打的标签（如，类型标签: 剧情 / 军事 / 悬疑 / 言情）
    * playNum 播放次数
    * flower 鲜花数，或顶的次数
    * egg 鸡蛋数，或踩的次数
-   
-presenter   [{name:**, id:**, url:**}] 主持人
+   * presenter `[{name:**, id:\**, url:**}]` 主持人
+
 ### 阅读
 book集合：
 
-- _id 请看“_id”设计部分
+- _id
 - name
 - site
 - code
 - url
-- time 采集时间
 - category
 - c_code
-- tag []
+- tag
+- time 采集时间
 - properties
    * author作者
    * aboutAuthor作者简介
@@ -235,8 +238,8 @@ book集合：
    * scoreNum 评论数
    * scoreValue 评分，满分100
 
-url hash
-存储url与本地缓存文件的映射。
+## url hash
+存储url与本地缓存文件的映射。  
 本地文件名基于url的md5.
 
 <pre>
@@ -254,13 +257,10 @@ public static String getHash(String url){
 }
 </pre>
 
-举例说明，例如
-    http://a.m.taobao.com/items/i42471538944.htm?sid=60338c63d854b9ef&abtest=4&rn=2bdac199debd8eb86b7234fc1d3c712e
-的本地文件名为：
-    a.m.taobao.com/items/1dee39a9c6bb4e2e24684315f4d8bdf5
+举例说明，例如`http://a.m.taobao.com/items/i42471538944.htm?sid=60338c63d854b9ef&abtest=4&rn=2bdac199debd8eb86b7234fc1d3c712e`的本地文件名为：`a.m.taobao.com/items/1dee39a9c6bb4e2e24684315f4d8bdf5`
 
 # 用户接口
 ## 标签映射导入
-以咪咕音乐的标签映射为例进行说明。
-在程序的classpath根路径下（对于开发环境，是resources文件夹；对于生产环境，默认是conf文件夹）创建文件夹tagmap，然后添加文件“music.migu.csv”。注意：文件名的格式为：网站名 + “.csv”。
+以咪咕音乐的标签映射为例进行说明。  
+在程序的classpath根路径下（对于开发环境，是resources文件夹；对于生产环境，默认是conf文件夹）创建文件夹tagmap，然后添加文件“music.migu.csv”。注意：文件名的格式为：网站名 + “.csv”。  
 编辑“music.migu.csv”文件，第一行为标题行。
