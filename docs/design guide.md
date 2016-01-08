@@ -192,10 +192,10 @@ video集合：
    * director  `[{name:**, id:**, url:**}]` 导演列表，包括名字，id，url
    * star `[{name:**, id:**, url:**}]` 主演列表，包括名字，id，url
    * presenter   `[{name:**, id:**, url:**}]` 主持人
-   * series 电视剧的聚集 `[{name:**, id:**,url:**, label:**,playNum:**, guests: [{name:**, id:**, url:**}]}]` 剧集列表，包括剧集的名字，剧集的id，剧集的url，剧集的label(例如03-21期), 播放次数，嘉宾
+   * series `[{name:**, id:**,url:**, label:**,playNum:**, guests: [{name:**, id:**, url:**}]}]` 电视剧的剧集列表，包括剧集的名字，剧集的id，剧集的url，剧集的label(例如03-21期), 播放次数，嘉宾
    
 ### 动漫
-catoon集合：
+anime集合：
 
 - _id
 - name 动漫名称
@@ -213,6 +213,9 @@ catoon集合：
    * flower 鲜花数，或顶的次数
    * egg 鸡蛋数，或踩的次数
    * presenter `[{name:**, id:\**, url:**}]` 主持人
+
+### 动画
+catoon集合
 
 ### 阅读
 book集合：
@@ -257,10 +260,14 @@ public static String getHash(String url){
 }
 </pre>
 
-举例说明，例如`http://a.m.taobao.com/items/i42471538944.htm?sid=60338c63d854b9ef&abtest=4&rn=2bdac199debd8eb86b7234fc1d3c712e`的本地文件名为：`a.m.taobao.com/items/1dee39a9c6bb4e2e24684315f4d8bdf5`
+举例说明，例如
+`http://a.m.taobao.com/items/i42471538944.htm?sid=60338c63d854b9ef&abtest=4&rn=2bdac199debd8eb86b7234fc1d3c712e`
+的本地文件名为：
+`a.m.taobao.com/items/1dee39a9c6bb4e2e24684315f4d8bdf5`
 
 # 用户接口
 ## 标签映射导入
-以咪咕音乐的标签映射为例进行说明。  
-在程序的classpath根路径下（对于开发环境，是resources文件夹；对于生产环境，默认是conf文件夹）创建文件夹tagmap，然后添加文件“music.migu.csv”。注意：文件名的格式为：网站名 + “.csv”。  
-编辑“music.migu.csv”文件，第一行为标题行。
+以咪咕音乐的标签映射为例进行说明:
+
+1. 在程序的classpath根路径下（对于开发环境，是resources文件夹；对于生产环境，默认是conf文件夹）创建文件夹tagmap，然后添加文件“music.migu.csv”。注意：文件名的格式为：`site + '.csv'`。  
+1. 编辑“music.migu.csv”文件，第一行为标题行。

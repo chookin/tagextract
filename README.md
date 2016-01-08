@@ -1,7 +1,3 @@
-# 部署
-
-* 启动mongodb
-
 # 操作说明
 ## 采集分类信息
 
@@ -19,6 +15,7 @@
 ## 采集分类信息
 <pre>
 # 命令行方式执行，指定命令参数
+# 通过 -D<参数名=参数值>的方式修改配置参数。
 --task=collect-categories --class=cmri.tagbase.read.BaiduYueduCollection -Dproxy.enable=false -Ddownload.concurrent.num=1 -Ddownload.sleepMilliseconds=1000 
 # 任务方式启动（在已有进程内执行，不创建新的进程），指定任务的参数
 {task:collect-categories,class:cmri.tagbase.read.BaiduYueduCollection,proxy.enable:false,download.concurrent.num:1,download.sleepMilliseconds:1000}
