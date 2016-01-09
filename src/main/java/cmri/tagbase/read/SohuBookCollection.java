@@ -7,6 +7,7 @@ import cmri.tagbase.SiteName;
 import cmri.tagbase.base.CKCollection;
 import cmri.tagbase.orm.domain.CategoryEntity;
 import cmri.tagbase.orm.domain.KindEntity;
+import cmri.utils.lang.BaseOper;
 import cmri.utils.lang.StringHelper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -40,6 +41,17 @@ public class SohuBookCollection extends CKCollection {
     @Override
     public Collection<Request> getSeedCategoryRequests() {
         return TagPageProcessor.getSeedRequests();
+    }
+
+    public static void main(String[] args){
+        new BaseOper() {
+            @Override
+            public boolean action() {
+                new SohuBookCollection().init(getOptions().options())
+                        .start();
+                return true;
+            }
+        }.setArgs(args).action();
     }
 
     static class TagPageProcessor implements PageProcessor {

@@ -29,10 +29,10 @@ public abstract class TagUpdate extends BaseOper implements CategoryTagUpdate, K
 
     Set<String> parseSiteOption() {
         String option = "--sites";
-        if (this.getOptionsPack().get(option) == null) {
+        if (this.getOptions().get(option) == null) {
             return null;
         }
-        String paras = getOptionsPack().get(option);
+        String paras = getOptions().get(option);
         return JsonHelper.parseStringSet(paras);
     }
 }

@@ -10,7 +10,7 @@ import cmri.utils.lang.BaseOper;
 abstract class GameCollect extends BaseOper implements CategoryCollect, KindCollect {
     @Override
     public boolean action() {
-        return collectCategories(getOptionsPack())
-                || collectKinds(getOptionsPack());
+        return collectCategories(getOptions())
+                || collectKinds(getOptions());
     }
 }

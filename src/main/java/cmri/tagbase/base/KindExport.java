@@ -40,7 +40,7 @@ public abstract class KindExport extends BaseOper {
 
     Set<String> parseSiteOption(){
         String option = "--sites";
-        String paras = getOptionsPack().get(option);
+        String paras = getOptions().get(option);
         if(paras == null){
             return null;
         }

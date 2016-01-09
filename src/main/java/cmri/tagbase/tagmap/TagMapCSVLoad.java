@@ -34,7 +34,7 @@ public class TagMapCSVLoad extends BaseOper {
 
     @Override
     public boolean action() {
-        String fileName = this.getOptionsPack().get("--file");
+        String fileName = this.getOptions().get("--file");
         if(fileName != null) {
             loadAndSave(fileName);
         }else{

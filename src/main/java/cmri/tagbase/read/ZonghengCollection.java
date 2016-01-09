@@ -7,6 +7,7 @@ import cmri.tagbase.SiteName;
 import cmri.tagbase.base.CKCollection;
 import cmri.tagbase.orm.domain.CategoryEntity;
 import cmri.tagbase.orm.domain.KindEntity;
+import cmri.utils.lang.BaseOper;
 import cmri.utils.lang.StringHelper;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -33,6 +34,17 @@ public class ZonghengCollection extends CKCollection {
     @Override
     public Request getRequest(CategoryEntity category) {
         return BookPageProcessor.getRequest(category);
+    }
+
+    public static void main(String[] args){
+        new BaseOper() {
+            @Override
+            public boolean action() {
+                new ZonghengCollection().init(getOptions().options())
+                        .start();
+                return true;
+            }
+        }.setArgs(args).action();
     }
 
     static class CategoryPageProcessor implements PageProcessor {

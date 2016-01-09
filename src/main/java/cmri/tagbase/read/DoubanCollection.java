@@ -7,6 +7,7 @@ import cmri.tagbase.SiteName;
 import cmri.tagbase.base.CKCollection;
 import cmri.tagbase.orm.domain.CategoryEntity;
 import cmri.tagbase.orm.domain.KindEntity;
+import cmri.utils.lang.BaseOper;
 import cmri.utils.lang.TimeHelper;
 import cmri.utils.lang.StringHelper;
 import org.apache.commons.lang3.StringUtils;
@@ -36,6 +37,17 @@ public class DoubanCollection extends CKCollection {
     @Override
     public Collection<Request> getSeedCategoryRequests() {
         return CategoryPageProcessor.getSeedRequests();
+    }
+
+    public static void main(String[] args){
+        new BaseOper() {
+            @Override
+            public boolean action() {
+                new DoubanCollection().init(getOptions().options())
+                        .start();
+                return true;
+            }
+        }.setArgs(args).action();
     }
 
     static class CategoryPageProcessor implements PageProcessor {

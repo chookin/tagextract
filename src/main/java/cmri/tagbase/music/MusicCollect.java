@@ -10,7 +10,7 @@ import cmri.tagbase.base.CategoryCollect;
 abstract class MusicCollect extends BaseOper implements CategoryCollect, KindCollect {
     @Override
     public boolean action() {
-        return collectCategories(getOptionsPack())
-                || collectKinds(getOptionsPack());
+        return collectCategories(getOptions())
+                || collectKinds(getOptions());
     }
 }

@@ -18,8 +18,8 @@ import redis.clients.jedis.Jedis;
 abstract class SiteCollect extends BaseOper implements CategoryCollect, KindCollect {
     @Override
     public boolean action() {
-        return collectCategories(getOptionsPack())
-                || collectKinds(getOptionsPack());
+        return collectCategories(getOptions())
+                || collectKinds(getOptions());
     }
 
     @Override

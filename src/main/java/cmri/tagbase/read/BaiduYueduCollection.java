@@ -7,8 +7,9 @@ import cmri.tagbase.SiteName;
 import cmri.tagbase.base.CKCollection;
 import cmri.tagbase.orm.domain.CategoryEntity;
 import cmri.tagbase.orm.domain.KindEntity;
-import cmri.utils.lang.TimeHelper;
+import cmri.utils.lang.BaseOper;
 import cmri.utils.lang.StringHelper;
+import cmri.utils.lang.TimeHelper;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -32,6 +33,17 @@ public class BaiduYueduCollection extends CKCollection {
     @Override
     public Request getRequest(CategoryEntity category) {
         return BookPageProcessor.getRequest(category);
+    }
+
+    public static void main(String[] args){
+        new BaseOper() {
+            @Override
+            public boolean action() {
+                new BaiduYueduCollection().init(getOptions().options())
+                        .start();
+                return true;
+            }
+        }.setArgs(args).action();
     }
 
     static class CategoryPageProcessor implements PageProcessor {

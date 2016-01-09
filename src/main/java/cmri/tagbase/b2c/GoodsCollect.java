@@ -17,9 +17,9 @@ import java.util.Collection;
 abstract class GoodsCollect extends BaseOper implements CategoryCollect, KindCollect, GoodsDetailCollect {
     @Override
     public boolean action() {
-        return collectCategories(getOptionsPack())
-                || collectKinds(getOptionsPack())
-                || collectGoodsDetail(getOptionsPack());
+        return collectCategories(getOptions())
+                || collectKinds(getOptions())
+                || collectGoodsDetail(getOptions());
     }
 
     @Override

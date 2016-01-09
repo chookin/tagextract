@@ -8,6 +8,7 @@ import cmri.tagbase.SiteName;
 import cmri.tagbase.base.CKCollection;
 import cmri.tagbase.orm.domain.CategoryEntity;
 import cmri.tagbase.orm.domain.KindEntity;
+import cmri.utils.lang.BaseOper;
 import cmri.utils.lang.StringHelper;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -34,6 +35,17 @@ public class HeyueduCollection extends CKCollection {
     @Override
     public String getSiteName() {
         return SiteName.Heyuedu;
+    }
+
+    public static void main(String[] args){
+        new BaseOper() {
+            @Override
+            public boolean action() {
+                new HeyueduCollection().init(getOptions().options())
+                        .start();
+                return true;
+            }
+        }.setArgs(args).action();
     }
 
     static class CategoryPageProcessor implements PageProcessor {

@@ -12,19 +12,19 @@ public class TagCli extends BaseOper {
     private static final Logger LOG = Logger.getLogger(TagCli.class);
     @Override
     public boolean action() {
-        return false;
-    }
-
-    public static void main(String[] args){
-        BaseOper oper = new TagCli().setArgs(args);
-        if(oper.getOptionsPack().notExists("class")) {
+        if(getOptions().notExists("class")) {
             String json = "{class:BaiduYueduCollection,task:collect-categories,proxy.enable:false,download.concurrent.num:1,download.sleepMilliseconds:1000,all:true}";
-            oper.getOptionsPack().put(JsonHelper.parseStringMap(json));
+            getOptions().put(JsonHelper.parseStringMap(json));
         }
         try {
-            Job.createJob(oper.getOptionsPack().options()).start();
+            Job.createJob(getOptions().options()).start();
         } catch (ReflectiveOperationException e) {
             LOG.error(null, e);
         }
+        return true;
+    }
+
+    public static void main(String[] args){
+        new TagCli().setArgs(args).action();
     }
 }

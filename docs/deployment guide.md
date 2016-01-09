@@ -73,7 +73,6 @@
 
     umount -l /home/mtag/share
     /home/mtag/local/mfs/bin/mfsmount /home/mtag/share 
-其他
 如果moosefs的版本较高，系统自带的mount会不支持moosefs的一些选项，并在执行挂载命令时报错：
 
     /bin/mount: unrecognized option `--no-canonicalize'
@@ -128,39 +127,7 @@
     redis-cli KEYS "pd-c-music.migu*" | xargs -d \\n redis-cli DEL
     redis-cli KEYS "pd-c-youku*" | xargs -d \\n redis-cli DEL
     redis-cli KEYS "youku*" | xargs -d \\n redis-cli DEL
-   
-键存储
-   3.6.2.1 普通队列
-   两个队列：
-   1)	w-task_name 等待被处理的请求
-   2)	d-task_name 已被处理的请求
-   task_name为：
-   如果未指定名称，则为"anon"；
-   如果指定，则为：c-[prefix/]site/categoryName
-          public Spider(String name, Scheduler scheduler) {
-           this.name = generateTaskName(name);
-           if(scheduler == null){
-               this.scheduler = new PriorityScheduler();
-           }else{
-               this.scheduler = scheduler;
-           }
-       }
        
-       private String generateTaskName(String name){
-           String prefix = "c-"; // "collect-"
-           if (name == null || name.isEmpty()) {
-               return  "anon"; // anonymous
-           } else if (name.startsWith(prefix)) {
-               return name;
-           } else {
-               return prefix + name;
-           }
-       }
-   3.6.2.2 具有优先级的队列
-   两个队列：
-   3)	pw-task_name-priority 等待被处理的请求
-   4)	pd-task_name 已被处理的请求
-   
 ## PhantomJs
 安装
     yum -y install gcc gcc-c++ make flex bison gperf ruby openssl-devel freetype-devel fontconfig-devel libicu-devel sqlite-devel libpng-devel libjpeg-devel

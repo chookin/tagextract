@@ -12,7 +12,7 @@ abstract class VideoCollect extends BaseOper implements CategoryCollect, KindCol
     private static final Logger LOG = Logger.getLogger(VideoCollect.class);
     @Override
     public boolean action() {
-        return collectCategories(getOptionsPack())
-                || collectKinds(getOptionsPack());
+        return collectCategories(getOptions())
+                || collectKinds(getOptions());
     }
 }
