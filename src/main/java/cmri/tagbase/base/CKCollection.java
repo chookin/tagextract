@@ -1,6 +1,7 @@
 package cmri.tagbase.base;
 
 import cmri.etl.job.JobAdapter;
+import cmri.utils.configuration.ConfigManager;
 import org.apache.commons.lang3.Validate;
 
 /**
@@ -11,7 +12,7 @@ public abstract class CKCollection extends JobAdapter implements CategoryCollect
     public void run() {
         onStart();
         try {
-            String task = optionsPack.get("task");
+            String task = ConfigManager.get("task", optionsPack.options(), "");
             Validate.notNull(task, "please assign para 'task'");
             switch (task){
                 case "collect-categories":
