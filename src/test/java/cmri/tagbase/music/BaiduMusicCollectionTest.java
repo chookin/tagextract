@@ -17,7 +17,7 @@ public class BaiduMusicCollectionTest {
         NetworkHelper.setDefaultProxy();
     }
     @Test
-    public void testProcess() throws Exception {
+    public void testDetailPageProcess() throws Exception {
         new SpiderAdapter().addRequest(BaiduMusicCollection.MusicDetailPageProcessor.getRequest(
                         new KindEntity("music")
                                 .setUrl("http://music.baidu.com/song/13139680")
